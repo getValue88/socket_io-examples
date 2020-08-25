@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="userList"></div>
+    <div class="chat" id="displayChat"></div>
+    <input class="chat" type="text" id="message">
+    <button class="chat" id="submit">Send</button>
+    <button class="chat" id="leave">Leave Room</button>
+    <!-- <button id="notificar">Notificar</button> -->
+    <br>
+    <ul>
+        <li id="+18">+18</li>
+        <li id="deportes">Deportes</li>
+    </ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let nickname = prompt('Introducir nickname: ');
+        let room = "lobby";
+        // Instanciamos el socket
+        var socket = io.connect('/chat', { query: `nickname=${nickname}` });
+        // var notificaciones = io('/notificaciones', { query: `nickname=${nickname}` });
+
+        const userList = document.getElementById('userList');
+        const displayChat = document.getElementById('displayChat');
+        const message = document.getElementById('message');
+        const submit = document.getElementById('submit');
+        // const notificar = document.getElementById('notificar');
+        const masDieciocho = document.getElementById('+18');
+        const deportes = document.getElementById('deportes');
+        const chatElements = document.getElementsByClassName('chat');
+        const leaveButton = document.getElementById('leave');
+
+        showHideChat(room);
+        /*
+        socket.on('refreshUserList', payload => {
+            userList.innerHTML = payload;
+        });
+*/
+        submit.addEventListener('click', (e) => {
+            let msg = message.value;
+            if (msg) {
+                socket.emit('message', { message: msg, room: room });
+                message.value = "";
+            }
+        });
+
+        leaveButton.addEventListener('click', (e) => {
+            socket.emit('leaveRoom', room);
+        })
+
+        socket.on('leaveRoom', () => {
+            room = "lobby";
+            showHideChat(room);
+        });
+
+        socket.on('chatRefresh', payload => {
+            alert(payload);
+            displayChat.innerHTML += payload;
+        });
+        /* 
+                 notificar.addEventListener('click', (e) => {
+                     notificaciones.emit('notificacion', null);
+                 });
+         
+                 notificaciones.on('alert', payload => {
+                     alert(payload);
+                 });
+          */
+        masDieciocho.addEventListener('click', (e) => {
+            socket.emit('joinRoom', '+18');
+        });
+
+        deportes.addEventListener('click', (e) => {
+            socket.emit('joinRoom', 'sports');
+        });
+
+        socket.on('joinedRoom', payload => {
+            console.log(payload);
+            room = payload.room;
+            let html = "";
+            payload.users.forEach(u => {
+                html += u + "<br>";
+            });
+            userList.innerHTML = html;
+            showHideChat(room);
+        });
+
+        function showHideChat(room) {
+            if (room == "lobby") {
+                Array.from(chatElements).forEach(el => {
+                    el.style.display = "none";
+                });
+            } else {
+                Array.from(chatElements).forEach(el => {
+                    el.style.display = "block";
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

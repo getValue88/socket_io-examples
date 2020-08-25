@@ -1,0 +1,14 @@
+websockets --> conexion persistente con el servidor
+permite que el servidor tenga una lista de sockets y enviar mensajes a todos los sockets al mismo tiempo
+
+casos de uso:
+chat
+presentaciones con slides
+trello
+juegos multiplayer
+
+==========
+npm init
+npm i --save socket.io
+
+crear servidor http con node o express

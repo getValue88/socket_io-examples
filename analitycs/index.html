@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Proyecto 2-6</title>
+</head>
+
+<body>
+    <h1>Proyecto 2-6</h1>
+    <span id="totalUsers"></span>
+    <br>
+    <span id="id"></span>
+    <br>
+    <div id="users"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let nickname = prompt('Introducir nickname: ');
+        // Instanciamos el socket
+        var socket = io.connect({ query: `nickname=${nickname}` });
+
+        let id = document.getElementById('id');
+        socket.on('newConnection', (payload) => {
+            id.innerHTML = 'ID: ' + payload;
+        });
+
+        let total = document.getElementById('totalUsers');
+        socket.on('totalUsers', (payload) => {
+            total.innerHTML = 'Users: ' + payload;
+        });
+
+        let userList = document.getElementById('users');
+        socket.on('userList', (payload) => {
+            userList.innerHTML = payload;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            const mouseCoords = {
+                x: e.clientX,
+                y: e.clientY
+            };
+            socket.emit('mouseMoving', mouseCoords);
+        });
+
+    </script>
+</body>
+
+</html>

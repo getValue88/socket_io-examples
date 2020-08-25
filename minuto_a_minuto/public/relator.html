@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minuto a minuto</title>
+</head>
+
+<body>
+    <button id="createEvent">Create Event</button>
+    <div id="form">
+        <div>
+            <input type="radio" id="comment" name="msgType" value="">
+            <label for="comment">Comment</label>
+            <input type="radio" id="goal" name="msgType" value="GOAL:">
+            <label for="goal">Goal</label>
+            <input type="radio" id="fault" name="msgType" value="FAULT:">
+            <label for="faul">Fault</label>
+            <input type="radio" id="yellow" name="msgType" value="YELLOW CARD:">
+            <label for="yellow">Yellow Card</label>
+            <input type="radio" id="red" name="msgType" value="RED CARD:">
+            <label for="red">Red Card</label>
+        </div>
+        <input type="text" id="input">
+        <button id="submit">Publish</button>
+    </div>
+
+    <script src=/socket.io/socket.io.js></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
